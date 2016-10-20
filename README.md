@@ -151,7 +151,7 @@ func main() {
 
 ---
 
-# demo
+# [demo](http://github.com/simplejia/wsp/tree/master/demo)
 * 提供一个简单易扩展的项目stub
 
 ## 实现初衷
@@ -180,7 +180,6 @@ func main() {
 │   ├── boss.go
 │   ├── login.go
 │   └── method.go
-├── gg.txt
 ├── main.go
 ├── model
 │   ├── demo.go
