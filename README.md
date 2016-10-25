@@ -13,7 +13,7 @@
 * 大型互联网社交业务
 
 ## 实现方式
-* 路由自动生成，按要求（见demo/controller/demo.go）提供controller/action的实现代码，wsp执行后会分析项目代码，自动生成路由表并记录在文件demo/WSP.go里，controller/action定义代码必须符合函数定义：func(http.ResponseWriter, *http.Request)，并且是带receiver的method
+* 路由自动生成，按要求提供controller/action的实现代码，wsp执行后会分析项目代码，自动生成路由表并记录在文件demo/WSP.go里，controller/action定义代码必须符合函数定义：func(http.ResponseWriter, *http.Request)，并且是带receiver的method
 [demo_set.go](http://github.com/simplejia/wsp/tree/master/demo/controller/demo_set.go)
 ```
 package controller
@@ -147,7 +147,7 @@ func main() {
 * 通过wrk压测工具在同样环境下（8核，8g），wsp空跑qps：9万，beego1.7.1空跑qps：5.5万
 * 更方便加入middleware（func(http.Handler) http.Handler），其实更推荐通过定义过滤器的方式支持类似功能
 * 更方便编写如下的测试用例：
-  * [test](http://github.com/simplejia/wsp/tree/master/demo/test)
+  * [test](http://github.com/simplejia/wsp/tree/master/demo/test) (测试用例运行时需要用到项目配置文件，所以请在test目录生成../clog,../conf,../mysql,../redis的软链接)
 
 ---
 
