@@ -2,6 +2,7 @@ package filter
 
 import (
 	"net/http"
+	"runtime/debug"
 	"time"
 
 	"github.com/simplejia/clog"
@@ -17,6 +18,10 @@ func Boss(w http.ResponseWriter, r *http.Request, m map[string]interface{}) bool
 
 	// ...
 
-	clog.Info("Boss() %v, %v", err, elapse)
+	if err != nil {
+		clog.Error("Boss() err: %v, stack: %s", err, debug.Stack())
+	} else {
+		clog.Info("Boss() elapse: %v", elapse)
+	}
 	return true
 }

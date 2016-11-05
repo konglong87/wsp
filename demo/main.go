@@ -1,7 +1,8 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/simplejia/clog"
 	"github.com/simplejia/lc"
@@ -9,7 +10,7 @@ import (
 	"net/http"
 
 	_ "github.com/simplejia/wsp/demo/clog"
-	_ "github.com/simplejia/wsp/demo/conf"
+	"github.com/simplejia/wsp/demo/conf"
 	_ "github.com/simplejia/wsp/demo/mysql"
 	_ "github.com/simplejia/wsp/demo/redis"
 )
@@ -25,5 +26,10 @@ func init() {
 func main() {
 	clog.Info("main()")
 
-	log.Panic(http.ListenAndServe(":8080", nil))
+	s := &http.Server{
+		Addr: fmt.Sprintf("%s:%d", conf.C.App.Ip, conf.C.App.Port),
+	}
+	err := s.ListenAndServe()
+	clog.Error("main() s.ListenAndServe %v", err)
+	os.Exit(-1)
 }

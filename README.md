@@ -157,7 +157,7 @@ func main() {
 ## 实现初衷
 * 简单可依赖，充分利用go已有的东西，不另外增加复杂、难以理解的东西，这样做的好处包括：更容易跟随go的升级而升级，降低使用者学习成本
 * 提供常用组件的简单包装，如下：
-  * config，提供项目主配置文件自动解析，见[conf](http://github.com/simplejia/wsp/tree/master/demo/conf)
+  * config，提供项目主配置文件自动解析，见[conf](http://github.com/simplejia/wsp/tree/master/demo/conf)，可以通过传入自定义的env及conf参数来重定义配置文件里的参数，如：./demo -env dev -conf='app.port=8080::clog.mode=1'，多个参数用`::`分隔
   * redis，使用(github.com/garyburd/redigo)，提供配置文件自动解析，见[redis](http://github.com/simplejia/wsp/tree/master/demo/redis)
   * mysql，使用(database/sql)，提供配置文件自动解析，见[mysql](http://github.com/simplejia/wsp/tree/master/demo/mysql)，同时为了方便对象映射，提供了最常用的orm组件供选择使用，见[orm](http://github.com/simplejia/orm)
 
