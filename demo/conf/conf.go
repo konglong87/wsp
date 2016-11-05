@@ -15,12 +15,12 @@ import (
 )
 
 type Conf struct {
-	App struct {
+	App *struct {
 		Name string
 		Ip   string
 		Port int
 	}
-	Clog struct {
+	Clog *struct {
 		Name  string
 		Mode  int
 		Level int
