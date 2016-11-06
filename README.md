@@ -209,7 +209,3 @@ func main() {
   * model目录：负责数据处理
 * 接口实现上，建议一个接口对应一个文件，如controller/demo_get.go, service/demo_get.go, model/demo_get.go
 
-
-## LICENSE
-wsp is licensed under the Apache Licence, Version 2.0
-(http://www.apache.org/licenses/LICENSE-2.0.html)
