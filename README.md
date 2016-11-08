@@ -5,6 +5,9 @@
 * java annotation的功能挺方便，在wsp里，通过注释来实现过滤器方法的调用定义
 * 不能因为wsp的引入而降低原生go http webserver的性能
 
+## 安装
+> go get -u github.com/simplejia/wsp
+
 ## 使用场景
 * 以http webserver方式对外提供服务
 * 后台接口服务
