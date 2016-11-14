@@ -90,7 +90,7 @@ func init() {
 }
 ```
 
-*Wsp will analyze the project code, find the annotation that meets its requirements(referring to demo/controller/demo_set.go ) and generate filter invoking code automatically in demo/wsp.go. The annotation of filter is divided into prefilter and postfilter. Its format is as @prefilter({json body}),{json body} standing for the input parameter which complies with the definition format of json array(removing the brackets at the beginning and at the end) and is able to include string value or object value. The definition of filter function meets func (http.ResponseWriter, *http.Request, map[string]interface{}) bool. The filter function is as the following:
+* wsp will analyze the project code, find the annotation that meets its requirements(referring to demo/controller/demo_set.go ) and generate filter invoking code automatically in demo/wsp.go. The annotation of filter is divided into prefilter and postfilter. Its format is as @prefilter({json body}),{json body} standing for the input parameter which complies with the definition format of json array(removing the brackets at the beginning and at the end) and is able to include string value or object value. The definition of filter function meets func (http.ResponseWriter, *http.Request, map[string]interface{}) bool. The filter function is as the following:
 [method.go](http://github.com/simplejia/wsp/tree/master/demo/filter/method.go)
 ```
 package filter
