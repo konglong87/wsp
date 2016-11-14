@@ -1,9 +1,5 @@
 [中文 README](#中文)
 
-[ENGLISH README](#ENGLISH)
-
-ENGLISH
-===
 
 # [wsp](http://github.com/simplejia/wsp) (go http webserver)
 ## Original Intention
