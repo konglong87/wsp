@@ -326,11 +326,13 @@ func Method(w http.ResponseWriter, r *http.Request, p map[string]interface{}) bo
 }
 ```
 
-> filter输入参数map[string]interface{}，会自动设置"__T__"，time.Time类型，值为执行起始时间，可用于耗时统计，"__C__"，*{Controller}类型，值为*{Controller}实例，可通过接口方式存取相关数据（这种方式存取数据较context方式更简单实用），"__E__"，值为recover()返回值，用于检测错误并处理（后置过滤器必须recover()）
+> filter输入参数map[string]interface{}，会自动设置"__T__"，time.Time类型，值为执行起始时间，可用于耗时统计，"__C__"，*{Controller}类型，值为*{Controller}实例，可通过接口方式存取相关数据（这种方式存取数据较使用context包方式更简单实用），"__E__"，值为recover()返回值，用于检测错误并处理（后置过滤器必须recover()）
 
-* 项目main.go代码示例
+* 项目main.go代码示例 (在开头定义go:generate，通过go generate信命令生成WSP.go文件)
 [main.go](http://github.com/simplejia/wsp/tree/master/demo/main.go)
 ```
+//go:generate wsp
+
 package main
 
 import (

@@ -1,3 +1,5 @@
+//go:generate wsp
+
 package main
 
 import (
