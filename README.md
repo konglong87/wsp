@@ -1,3 +1,5 @@
+[中文-README](#中文-README)
+
 # [wsp](http://github.com/simplejia/wsp) (go http webserver)
 ## Original Intention
 * Simple and reliable, fully take advantage of golang and have not added anything else complicated. Advantages: much easier to update with golang and reduce learning cost of users.
@@ -213,6 +215,7 @@ func main() {
 * In api implementation, recommending one api matched one file, such as controller/demo_get.go, service/demo_get.go, model/demo_get.go
 
 ---
+# **中文-README**
 
 # [wsp](http://github.com/simplejia/wsp) (go http webserver)
 ## 实现初衷
