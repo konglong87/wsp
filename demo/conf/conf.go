@@ -43,14 +43,12 @@ func init() {
 	fcontent, err := ioutil.ReadFile(
 		filepath.Join(dir, "conf", "conf.json"))
 	if err != nil {
-		fmt.Println("conf.json not found")
-		os.Exit(-1)
+		panic(err)
 	}
 
 	fcontent = utils.RemoveAnnotation(fcontent)
 	if err := json.Unmarshal(fcontent, &Envs); err != nil {
-		fmt.Println("conf.json wrong format:", err)
-		os.Exit(-1)
+		panic(err)
 	}
 
 	C = Envs[Env]

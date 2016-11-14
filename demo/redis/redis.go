@@ -2,6 +2,7 @@ package conf4redis
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -14,41 +15,42 @@ import (
 	"github.com/simplejia/utils"
 )
 
-var RDS map[string]*redis.Pool = map[string]*redis.Pool{}
+type Conf struct {
+	ConnMaxLifetime string
+	MaxIdleConns    int
+	MaxOpenConns    int
+	Addr            string
+}
+
+var (
+	RDS  map[string]*redis.Pool = map[string]*redis.Pool{}
+	Envs map[string]*Conf
+	Env  string
+	C    *Conf
+)
 
 func parseRDFile(path string) {
-	type c struct {
-		ConnMaxLifetime string
-		MaxIdleConns    int
-		MaxOpenConns    int
-		Addr            string
-	}
-	var cs struct {
-		Env  string
-		Envs map[string]*c
-	}
 	fcontent, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 	fcontent = utils.RemoveAnnotation(fcontent)
-	if err := json.Unmarshal(fcontent, &cs); err != nil {
+	if err := json.Unmarshal(fcontent, &Envs); err != nil {
 		panic(err)
 	}
-	env := conf.Env
-	if cs.Env != "" {
-		env = cs.Env
-	}
-	cc := cs.Envs[env]
-	if cc == nil {
-		panic("env not right")
+
+	Env = conf.Env
+	C = Envs[Env]
+	if C == nil {
+		fmt.Println("env not right:", Env)
+		os.Exit(-1)
 	}
 
 	rd := &redis.Pool{
-		MaxIdle:     cc.MaxIdleConns,
+		MaxIdle:     C.MaxIdleConns,
 		IdleTimeout: time.Second * 240,
 		Dial: func() (c redis.Conn, err error) {
-			server := cc.Addr
+			server := C.Addr
 			c, err = redis.Dial("tcp", server,
 				redis.DialReadTimeout(time.Second*5),
 				redis.DialConnectTimeout(time.Second),

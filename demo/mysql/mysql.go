@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -15,46 +16,47 @@ import (
 	"github.com/simplejia/utils"
 )
 
-var DBS map[string]*sql.DB = map[string]*sql.DB{}
+type Conf struct {
+	ConnMaxLifetime string
+	MaxIdleConns    int
+	MaxOpenConns    int
+	Dsn             string
+}
+
+var (
+	DBS  map[string]*sql.DB = map[string]*sql.DB{}
+	Envs map[string]*Conf
+	Env  string
+	C    *Conf
+)
 
 func parseDBFile(path string) {
-	type c struct {
-		ConnMaxLifetime string
-		MaxIdleConns    int
-		MaxOpenConns    int
-		Dsn             string
-	}
-	var cs struct {
-		Env  string
-		Envs map[string]*c
-	}
 	fcontent, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 	fcontent = utils.RemoveAnnotation(fcontent)
-	if err := json.Unmarshal(fcontent, &cs); err != nil {
+	if err := json.Unmarshal(fcontent, &Envs); err != nil {
 		panic(err)
 	}
-	env := conf.Env
-	if cs.Env != "" {
-		env = cs.Env
-	}
-	cc := cs.Envs[env]
-	if cc == nil {
-		panic("env not right")
+
+	Env = conf.Env
+	C = Envs[Env]
+	if C == nil {
+		fmt.Println("env not right:", Env)
+		os.Exit(-1)
 	}
 
-	db, err := sql.Open("mysql", cc.Dsn)
+	db, err := sql.Open("mysql", C.Dsn)
 	if err != nil {
 		panic(err)
 	}
-	dur, _ := time.ParseDuration(cc.ConnMaxLifetime)
+	dur, _ := time.ParseDuration(C.ConnMaxLifetime)
 	db.SetConnMaxLifetime(dur)
-	db.SetMaxIdleConns(cc.MaxIdleConns)
-	db.SetMaxOpenConns(cc.MaxOpenConns)
+	db.SetMaxIdleConns(C.MaxIdleConns)
+	db.SetMaxOpenConns(C.MaxOpenConns)
 
-	key := strings.TrimSuffix(filepath.Base(path), "_db.json")
+	key := strings.TrimSuffix(filepath.Base(path), filepath.Ext(path))
 	DBS[key] = db
 }
 
