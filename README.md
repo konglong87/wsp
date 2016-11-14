@@ -1,4 +1,9 @@
-[中文-README](#中文-README)
+[中文 README](#中文)
+
+[ENGLISH README](#ENGLISH)
+
+ENGLISH
+===
 
 # [wsp](http://github.com/simplejia/wsp) (go http webserver)
 ## Original Intention
@@ -215,7 +220,8 @@ func main() {
 * In api implementation, recommending one api matched one file, such as controller/demo_get.go, service/demo_get.go, model/demo_get.go
 
 ---
-# **中文-README**
+中文
+===
 
 # [wsp](http://github.com/simplejia/wsp) (go http webserver)
 ## 实现初衷
