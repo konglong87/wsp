@@ -9,20 +9,21 @@ import (
 
 func (demo *Demo) Get(key string) (value string) {
 	demoModel := NewDemo()
-	err := lm.GlueLc(
-		key,
-		demoModel,
-		func(p, r interface{}) error {
+	lmStru := &lm.LmStru{
+		Input:  key,
+		Output: demoModel,
+		Proc: func(p, r interface{}) error {
 			return nil
 		},
-		func(p interface{}) string {
+		Key: func(p interface{}) string {
 			return p.(string)
 		},
-		&lm.LcStru{
+		Lc: &lm.LcStru{
 			Expire: time.Second,
 			Safety: true,
 		},
-	)
+	}
+	err := lm.GlueLc(lmStru)
 	if err != nil {
 		clog.Error("Demo:Get() %v", err)
 		return
