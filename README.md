@@ -153,7 +153,7 @@ func main() {
 * Under the same condition of (8 CORE, 8G),  by wrk pressure measurement tools, the dry run QPS of wps is 9 million while that of beego1.7.1 is 5.5 million.
 * It is much easier to add middleware（func(http.Handler) http.Handler). Actually, we recommend support such similar functions via defining the filters more.
 * It is much easier to edit the following test case:
-  * [test](http://github.com/simplejia/wsp/tree/master/demo/test) (it needs to use the project configuration file when the test instance is running, so please generate the soft-link of ../clog,../conf,../mysql,../redis under the directory of test)
+  * [test](http://github.com/simplejia/wsp/tree/master/demo/test)
 
 ---
 
@@ -202,13 +202,9 @@ func main() {
 │   ├── demo_get.go
 │   └── demo_set.go
 └── test
-    ├── clog -> ../clog
-    ├── conf -> ../conf
     ├── demo_get_test.go
     ├── demo_set_test.go
     ├── init_test.go
-    ├── mysql -> ../mysql
-    └── redis -> ../redis
 ```
   * Controller path: in charge of the parameter analysis of request and service invoking
   * Service path: in charge of dealing with logic and model invoking
@@ -373,7 +369,7 @@ func main() {
 * 通过wrk压测工具在同样环境下（8核，8g），wsp空跑qps：9万，beego1.7.1空跑qps：5.5万
 * 更方便加入middleware（func(http.Handler) http.Handler），其实更推荐通过定义过滤器的方式支持类似功能
 * 更方便编写如下的测试用例：
-  * [test](http://github.com/simplejia/wsp/tree/master/demo/test) (测试用例运行时需要用到项目配置文件，所以请在test目录生成../clog,../conf,../mysql,../redis的软链接)
+  * [test](http://github.com/simplejia/wsp/tree/master/demo/test)
 
 ---
 
@@ -422,13 +418,9 @@ func main() {
 │   ├── demo_get.go
 │   └── demo_set.go
 └── test
-    ├── clog -> ../clog
-    ├── conf -> ../conf
     ├── demo_get_test.go
     ├── demo_set_test.go
     ├── init_test.go
-    ├── mysql -> ../mysql
-    └── redis -> ../redis
 ```
   * controller目录：负责request参数解析，service调用
   * service目录：负责逻辑处理，model调用

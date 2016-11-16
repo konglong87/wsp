@@ -61,9 +61,15 @@ func parseDBFile(path string) {
 }
 
 func init() {
-	dir, _ := os.Getwd()
+	dir := ""
+	for _, p := range []string{".", ".."} {
+		dir = filepath.Join(p, "mysql")
+		if info, err := os.Stat(dir); err == nil && info.IsDir() {
+			break
+		}
+	}
 	err := filepath.Walk(
-		filepath.Join(dir, "mysql"),
+		filepath.Join(dir),
 		func(path string, info os.FileInfo, err error) (reterr error) {
 			if err != nil {
 				reterr = err
