@@ -1,4 +1,4 @@
-package conf4redis
+package redis
 
 import (
 	"encoding/json"
