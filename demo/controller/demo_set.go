@@ -7,7 +7,7 @@ import (
 	"github.com/simplejia/wsp/demo/service"
 )
 
-// @prefilter("Login", {"Method":{"type":"get"}})
+// @prefilter("Login", {"Method":{"type":"post"}})
 // @postfilter("Boss")
 func (demo *Demo) Set(w http.ResponseWriter, r *http.Request) {
 	key := r.FormValue("key")

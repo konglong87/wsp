@@ -1,4 +1,4 @@
-package test
+package controller_test
 
 import (
 	"encoding/json"
@@ -7,18 +7,24 @@ import (
 )
 
 func DemoSet(key, value string) (err error) {
-	respStr := h("Demo/Set",
-		map[string]string{
+	p := &gpp{
+		Path: "/Demo/Set",
+		Params: map[string]string{
 			"key":   key,
 			"value": value,
-		})
+		},
+	}
+	respStr, err := post(p)
+	if err != nil {
+		return
+	}
 
-	respStru := &struct {
+	var respStru *struct {
 		Code int
-	}{}
-	json.Unmarshal([]byte(respStr), &respStru)
-	if respStru.Code != 0 {
-		err = fmt.Errorf("respStru: %v, respStr: %v", respStru, respStr)
+	}
+	json.Unmarshal(respStr, &respStru)
+	if respStru == nil || respStru.Code != 0 {
+		err = fmt.Errorf("respStru: %v, respStr: %s", respStru, respStr)
 		return
 	}
 

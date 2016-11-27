@@ -36,7 +36,7 @@ func init() {
 		if ok := filter.Login(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e}); !ok {
 			return
 		}
-		if ok := filter.Method(w, r, map[string]interface{}{"type": "get", "__T__": t, "__C__": c, "__E__": e}); !ok {
+		if ok := filter.Method(w, r, map[string]interface{}{"type": "post", "__T__": t, "__C__": c, "__E__": e}); !ok {
 			return
 		}
 		c.Set(w, r)

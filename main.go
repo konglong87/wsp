@@ -229,6 +229,9 @@ func getGoFiles(path string) (files []string, err error) {
 		if filepath.Ext(path) != ".go" {
 			return
 		}
+		if strings.HasSuffix(path, "_test.go") {
+			return
+		}
 		absPath, err := filepath.Abs(path)
 		if err != nil {
 			reterr = err
