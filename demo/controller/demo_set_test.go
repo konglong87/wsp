@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
+	"time"
 )
 
 func DemoSet(key, value string) (err error) {
@@ -27,6 +28,9 @@ func DemoSet(key, value string) (err error) {
 		err = fmt.Errorf("respStru: %v, respStr: %s", respStru, respStr)
 		return
 	}
+
+	// sleep a while, because lc cache may have a delayed effect
+	time.Sleep(time.Millisecond)
 
 	return
 }

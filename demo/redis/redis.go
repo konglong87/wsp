@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 
@@ -68,9 +67,15 @@ func parseRDFile(path string) {
 }
 
 func init() {
-	_, file, _, _ := runtime.Caller(1)
+	dir := "redis"
+	for i := 0; i < 3; i++ {
+		if info, err := os.Stat(dir); err == nil && info.IsDir() {
+			break
+		}
+		dir = filepath.Join("..", dir)
+	}
 	err := filepath.Walk(
-		filepath.Dir(file),
+		dir,
 		func(path string, info os.FileInfo, err error) (reterr error) {
 			if err != nil {
 				reterr = err
