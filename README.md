@@ -420,8 +420,8 @@ func main() {
     ├── demo_get.go
     ├── demo_set.go
 ```
-  * controller目录：负责request参数解析，service调用
-  * service目录：负责逻辑处理，model调用
+  * controller目录：负责request参数解析，service调用。 注：wsp也会解析子目录
+  * service目录：负责逻辑处理，model调用
   * model目录：负责数据处理
 * 接口实现上，建议一个接口对应一个文件，如controller/demo_get.go, service/demo_get.go, model/demo_get.go
 
