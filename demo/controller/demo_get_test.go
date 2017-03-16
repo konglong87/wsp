@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
+
+	"github.com/simplejia/wsp/demo/controller"
 )
 
 func DemoGet(key string) (value string, err error) {
-	p := &gpp{
-		Path: "/Demo/Get",
-		Params: map[string]string{
-			"key": key,
-		},
+	params := map[string]string{
+		"key": key,
 	}
-	respStr, err := get(p)
+	c := &controller.Demo{}
+	respStr, err := h(c.Get, params)
 	if err != nil {
 		return
 	}

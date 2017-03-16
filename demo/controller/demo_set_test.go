@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/simplejia/wsp/demo/controller"
 )
 
 func DemoSet(key, value string) (err error) {
-	p := &gpp{
-		Path: "/Demo/Set",
-		Params: map[string]string{
-			"key":   key,
-			"value": value,
-		},
+	params := map[string]string{
+		"key":   key,
+		"value": value,
 	}
-	respStr, err := post(p)
+	c := &controller.Demo{}
+	respStr, err := h(c.Set, params)
 	if err != nil {
 		return
 	}

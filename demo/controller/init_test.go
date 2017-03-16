@@ -8,37 +8,21 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"strings"
-	"time"
 
-	_ "github.com/simplejia/wsp/demo"
+	"github.com/simplejia/lc"
+	_ "github.com/simplejia/wsp/demo/clog"
+	_ "github.com/simplejia/wsp/demo/conf"
+	_ "github.com/simplejia/wsp/demo/mysql"
+	_ "github.com/simplejia/wsp/demo/redis"
 )
 
-type gpp struct {
-	Path    string
-	Timeout time.Duration
-	Headers map[string]string
-	Params  interface{}
+func init() {
+	lc.Init(1e5)
 }
 
-func get(p *gpp) (body []byte, err error) {
-	path, timeout, headers, params := p.Path, p.Timeout, p.Headers, p.Params
-	uri := fmt.Sprintf("http://127.0.0.1/%s", strings.TrimPrefix(path, "/"))
-	switch v := params.(type) {
-	case map[string]string:
-		u, _ := url.Parse(uri)
-		values := u.Query()
-		for key, value := range v {
-			values.Set(key, value)
-		}
-		u.RawQuery = values.Encode()
-		uri = u.String()
-	}
-	return sendHttpRequest("GET", uri, timeout, headers, nil)
-}
+type ft func(http.ResponseWriter, *http.Request)
 
-func post(p *gpp) (body []byte, err error) {
-	path, timeout, headers, params := p.Path, p.Timeout, p.Headers, p.Params
-	uri := fmt.Sprintf("http://127.0.0.1/%s", strings.TrimPrefix(path, "/"))
+func h(f ft, params interface{}) (body []byte, err error) {
 	var reader io.Reader
 	switch v := params.(type) {
 	case map[string]string:
@@ -52,39 +36,18 @@ func post(p *gpp) (body []byte, err error) {
 	case []byte:
 		reader = bytes.NewReader(v)
 	}
-	return sendHttpRequest("POST", uri, timeout, headers, reader)
-}
 
-func sendHttpRequest(
-	method string,
-	uri string,
-	timeout time.Duration,
-	headers map[string]string,
-	bodyReader io.Reader,
-) (body []byte, err error) {
-	r, err := http.NewRequest(method, uri, bodyReader)
+	r, err := http.NewRequest("POST", "", reader)
 	if err != nil {
 		return
 	}
-	if host, ok := headers["Host"]; ok {
-		r.Host = host
-	}
-	for name, value := range headers {
-		r.Header.Set(name, value)
-	}
-	if bodyReader != nil {
-		r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	}
-
+	r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	w := httptest.NewRecorder()
-
-	http.DefaultServeMux.ServeHTTP(w, r)
-
+	f(w, r)
+	body = w.Body.Bytes()
 	if g, e := w.Code, http.StatusOK; g != e {
-		err = fmt.Errorf("http resp code: %d", g)
+		err = fmt.Errorf("http resp status not ok: %s", http.StatusText(g))
 		return
 	}
-
-	body = w.Body.Bytes()
 	return
 }
