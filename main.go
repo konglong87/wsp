@@ -35,12 +35,13 @@ type filter struct {
 }
 
 type ca struct {
-	ImportPath  string
-	PackageName string
-	TypeName    string
-	MethodName  string
-	PreFilters  []*filter
-	PostFilters []*filter
+	ImportPath   string
+	PackageName  string
+	RelativePath string
+	TypeName     string
+	MethodName   string
+	PreFilters   []*filter
+	PostFilters  []*filter
 }
 
 func exit() {
@@ -73,6 +74,19 @@ func getImportPath(file string) string {
 		if strings.HasPrefix(dir, path) {
 			return dir[len(path)+1:]
 		}
+	}
+	fmt.Fprintf(buf, "get import path fail\n")
+	exit()
+	return ""
+}
+
+func getRelativePath(controllerPath, file string) string {
+	pathP, _ := filepath.Abs(controllerPath)
+	pathP, _ = filepath.EvalSymlinks(pathP)
+	pathC := filepath.Dir(file)
+	pathC, _ = filepath.EvalSymlinks(pathC)
+	if strings.HasPrefix(pathC, pathP) {
+		return pathC[len(pathP):]
 	}
 	return ""
 }
@@ -178,12 +192,13 @@ func parseGo4Controller(file string, es4Filter []*ca) (es []*ca, err error) {
 		}
 		preFilters, postFilters := getFilters(mdecl.Doc.Text(), es4Filter)
 		es = append(es, &ca{
-			ImportPath:  getImportPath(file),
-			PackageName: f.Name.String(),
-			TypeName:    matches[1],
-			MethodName:  mdecl.Name.String(),
-			PreFilters:  preFilters,
-			PostFilters: postFilters,
+			ImportPath:   getImportPath(file),
+			PackageName:  f.Name.String(),
+			RelativePath: getRelativePath(controllerPath, file),
+			TypeName:     matches[1],
+			MethodName:   mdecl.Name.String(),
+			PreFilters:   preFilters,
+			PostFilters:  postFilters,
 		})
 	}
 	return
@@ -308,9 +323,9 @@ func gen(es []*ca) (err error) {
 	for _, e := range es {
 		s += "\thttp.HandleFunc(\""
 		if lowerFlag {
-			s += "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
+			s += lower(e.RelativePath) + "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
 		} else {
-			s += "/" + e.TypeName + "/" + e.MethodName
+			s += e.RelativePath + "/" + e.TypeName + "/" + e.MethodName
 		}
 		s += "\", func(w http.ResponseWriter, r *http.Request) {\n"
 		s += "\t\tt := time.Now()\n"
