@@ -290,7 +290,7 @@ func gen(es []*ca) (err error) {
 			s += "import \"" + f.ImportPath + "\"\n"
 		}
 	}
-	f := func(filters []*filter, space string) (str string) {
+	f := func(path string, filters []*filter, space string) (str string) {
 		for _, filter := range filters {
 			params := "map[string]interface{}{"
 			a := []string{}
@@ -310,6 +310,7 @@ func gen(es []*ca) (err error) {
 			a = append(a, "\"__T__\": t")
 			a = append(a, "\"__C__\": c")
 			a = append(a, "\"__E__\": e")
+			a = append(a, "\"__P__\": "+"\""+path+"\"")
 			params += strings.Join(a, ", ")
 			params += "}"
 			str += space + "if ok := " + filter.PackageName + "." + filter.FuncName + "(w, r, " + params + "); !ok {\n"
@@ -322,11 +323,13 @@ func gen(es []*ca) (err error) {
 	s += "func init() {\n"
 	for _, e := range es {
 		s += "\thttp.HandleFunc(\""
+		path := ""
 		if lowerFlag {
-			s += lower(e.RelativePath) + "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
+			path = lower(e.RelativePath) + "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
 		} else {
-			s += e.RelativePath + "/" + e.TypeName + "/" + e.MethodName
+			path = e.RelativePath + "/" + e.TypeName + "/" + e.MethodName
 		}
+		s += path
 		s += "\", func(w http.ResponseWriter, r *http.Request) {\n"
 		s += "\t\tt := time.Now()\n"
 		s += "\t\t_ = t\n"
@@ -334,9 +337,9 @@ func gen(es []*ca) (err error) {
 		s += "\t\tc := new(" + e.PackageName + "." + e.TypeName + ")\n"
 		s += "\t\tdefer func() {\n"
 		s += "\t\t\te = recover()\n"
-		s += f(e.PostFilters, "\t\t\t")
+		s += f(path, e.PostFilters, "\t\t\t")
 		s += "\t\t}()\n"
-		s += f(e.PreFilters, "\t\t")
+		s += f(path, e.PreFilters, "\t\t")
 		s += "\t\tc." + e.MethodName + "(w, r)\n"
 		s += "\t})\n\n"
 	}
