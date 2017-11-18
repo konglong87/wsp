@@ -24,6 +24,7 @@ var (
 	controllerPath string
 	filterPath     string
 	lowerFlag      bool
+	shortFlag      bool
 	buf            = new(bytes.Buffer)
 )
 
@@ -324,15 +325,18 @@ func gen(es []*ca) (err error) {
 	for _, e := range es {
 		s += "\thttp.HandleFunc(\""
 		path := ""
+		relativePath := ""
+		if !shortFlag {
+			relativePath = e.RelativePath
+		}
 		if lowerFlag {
-			path = lower(e.RelativePath) + "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
+			path = lower(relativePath) + "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
 		} else {
-			path = e.RelativePath + "/" + e.TypeName + "/" + e.MethodName
+			path = relativePath + "/" + e.TypeName + "/" + e.MethodName
 		}
 		s += path
 		s += "\", func(w http.ResponseWriter, r *http.Request) {\n"
 		s += "\t\tt := time.Now()\n"
-		s += "\t\t_ = t\n"
 		s += "\t\tvar e interface{}\n"
 		s += "\t\tc := new(" + e.PackageName + "." + e.TypeName + ")\n"
 		s += "\t\tdefer func() {\n"
@@ -352,6 +356,7 @@ func main() {
 	flag.StringVar(&controllerPath, "c", "controller", "Specify the directory of controller path")
 	flag.StringVar(&filterPath, "f", "filter", "Specify the directory of filter path")
 	flag.BoolVar(&lowerFlag, "l", false, "Controller/Action, lower first alpha")
+	flag.BoolVar(&shortFlag, "s", false, "Do not add directory name")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "A partner for golang webserver\n")
