@@ -24,6 +24,7 @@ var (
 	controllerPath string
 	filterPath     string
 	lowerFlag      bool
+	snakeFlag      bool
 	shortFlag      bool
 	buf            = new(bytes.Buffer)
 )
@@ -64,6 +65,26 @@ func lower(str string) string {
 		return ""
 	}
 	return strings.ToLower(str[0:1]) + str[1:]
+}
+
+func snake(src string) string {
+	thisUpper := false
+	prevUpper := false
+
+	buf := bytes.NewBufferString("")
+	for i, v := range src {
+		if v >= 'A' && v <= 'Z' {
+			thisUpper = true
+		} else {
+			thisUpper = false
+		}
+		if i > 0 && thisUpper && !prevUpper {
+			buf.WriteRune('_')
+		}
+		prevUpper = thisUpper
+		buf.WriteRune(v)
+	}
+	return strings.ToLower(buf.String())
 }
 
 func getImportPath(file string) string {
@@ -331,6 +352,8 @@ func gen(es []*ca) (err error) {
 		}
 		if lowerFlag {
 			path = lower(relativePath) + "/" + lower(e.TypeName) + "/" + lower(e.MethodName)
+		} else if snakeFlag {
+			path = snake(relativePath) + "/" + snake(e.TypeName) + "/" + snake(e.MethodName)
 		} else {
 			path = relativePath + "/" + e.TypeName + "/" + e.MethodName
 		}
@@ -356,7 +379,8 @@ func main() {
 	flag.StringVar(&controllerPath, "c", "controller", "Specify the directory of controller path")
 	flag.StringVar(&filterPath, "f", "filter", "Specify the directory of filter path")
 	flag.BoolVar(&lowerFlag, "l", false, "Controller/Action, lower first alpha")
-	flag.BoolVar(&shortFlag, "s", false, "Do not add directory name")
+	flag.BoolVar(&snakeFlag, "s", false, "Controller/Action, snake case pattern")
+	flag.BoolVar(&shortFlag, "d", false, "Do not add directory name")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "A partner for golang webserver\n")
