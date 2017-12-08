@@ -15,7 +15,7 @@ func init() {
 		c := new(controller.Demo)
 		defer func() {
 			e = recover()
-			if ok := filter.Boss(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e}); !ok {
+			if ok := filter.Boss(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e, "__P__": "/Demo/Get"}); !ok {
 				return
 			}
 		}()
@@ -29,14 +29,14 @@ func init() {
 		c := new(controller.Demo)
 		defer func() {
 			e = recover()
-			if ok := filter.Boss(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e}); !ok {
+			if ok := filter.Boss(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e, "__P__": "/Demo/Set"}); !ok {
 				return
 			}
 		}()
-		if ok := filter.Login(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e}); !ok {
+		if ok := filter.Login(w, r, map[string]interface{}{"__T__": t, "__C__": c, "__E__": e, "__P__": "/Demo/Set"}); !ok {
 			return
 		}
-		if ok := filter.Method(w, r, map[string]interface{}{"type": "post", "__T__": t, "__C__": c, "__E__": e}); !ok {
+		if ok := filter.Method(w, r, map[string]interface{}{"type": "post", "__T__": t, "__C__": c, "__E__": e, "__P__": "/Demo/Set"}); !ok {
 			return
 		}
 		c.Set(w, r)

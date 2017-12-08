@@ -297,6 +297,8 @@ func gen(es []*ca) (err error) {
 		}
 		added[e.ImportPath] = true
 		s += "import \"" + e.ImportPath + "\"\n"
+	}
+	for _, e := range es {
 		for _, f := range e.PreFilters {
 			if added[f.ImportPath] {
 				continue
@@ -360,6 +362,7 @@ func gen(es []*ca) (err error) {
 		s += path
 		s += "\", func(w http.ResponseWriter, r *http.Request) {\n"
 		s += "\t\tt := time.Now()\n"
+		s += "\t\t_ = t\n"
 		s += "\t\tvar e interface{}\n"
 		s += "\t\tc := new(" + e.PackageName + "." + e.TypeName + ")\n"
 		s += "\t\tdefer func() {\n"
