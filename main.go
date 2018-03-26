@@ -94,7 +94,7 @@ func getImportPath(file string) string {
 		path, _ = filepath.EvalSymlinks(path)
 		dir, _ = filepath.EvalSymlinks(dir)
 		if strings.HasPrefix(dir, path) {
-			return dir[len(path)+1:]
+			return strings.Replace(dir[len(path)+1:], string(filepath.Separator), "/", -1)
 		}
 	}
 	fmt.Fprintf(buf, "get import path fail\n")
