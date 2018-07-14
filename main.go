@@ -242,7 +242,7 @@ func parseGo4Filter(file string) (es []*ca, err error) {
 		}
 		str := new(bytes.Buffer)
 		printer.Fprint(str, fset, mdecl)
-		if matched, _ := regexp.MatchString(`func .+?\(.+? .+?\.ResponseWriter, .+? \*.+?.Request, .+? map\[string\]interface{}\) bool {(.|\n)*}`, str.String()); !matched {
+		if matched, _ := regexp.MatchString(`func .+?\(.+? .+?\.ResponseWriter, .+? \*.+?.Request, .+? map\[string\]interface{}\) (bool|\(\w+? bool\)) {(.|\n)*}`, str.String()); !matched {
 			continue
 		}
 		es = append(es, &ca{

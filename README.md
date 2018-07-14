@@ -230,6 +230,7 @@ func main() {
 
 ## 使用案例
 * 大型互联网社交业务
+* 最新的案例请参考github.com/simplejia/skel (*推荐*)
 
 ## 实现方式
 * 路由自动生成，按要求提供controller/action的实现代码，wsp执行后会分析项目代码，自动生成路由表并记录在文件demo/WSP.go里，controller/action定义代码必须符合函数定义：func(http.ResponseWriter, *http.Request)，并且是带receiver的method
