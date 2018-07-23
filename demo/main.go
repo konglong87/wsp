@@ -4,21 +4,19 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/simplejia/clog"
 	"github.com/simplejia/lc"
 
 	"net/http"
 
-	_ "github.com/simplejia/wsp/demo/clog"
 	"github.com/simplejia/wsp/demo/conf"
-	_ "github.com/simplejia/wsp/demo/mysql"
-	_ "github.com/simplejia/wsp/demo/redis"
 )
 
 func init() {
 	lc.Init(1e5)
+
+	clog.Init(conf.C.Clog.Name, "", conf.C.Clog.Level, conf.C.Clog.Mode)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
@@ -33,5 +31,4 @@ func main() {
 	}
 	err := s.ListenAndServe()
 	clog.Error("main() s.ListenAndServe %v", err)
-	os.Exit(-1)
 }
